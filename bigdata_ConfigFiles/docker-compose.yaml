@@ -1,0 +1,38 @@
+version: "3.8"
+
+services:
+  namenode:
+    image: apache/hadoop:3.3.6
+    hostname: namenode
+    volumes:
+      - ./Makefile:/opt/hadoop/Makefile
+    ports:
+      - 9870:9870
+    env_file:
+      - ./config
+    environment:
+      ENSURE_NAMENODE_DIR: "/tmp/hadoop-root/dfs/name"
+    command: ["hdfs", "namenode"]
+
+  datanode:
+    image: apache/hadoop:3.3.6
+    hostname: datanode
+    env_file:
+      - ./config
+    command: ["hdfs", "datanode"]
+
+  resourcemanager:
+    image: apache/hadoop:3.3.6
+    hostname: resourcemanager
+    ports:
+      - 8088:8088
+    env_file:
+      - ./config
+    command: ["yarn", "resourcemanager"]
+
+  nodemanager:
+    image: apache/hadoop:3.3.6
+    hostname: nodemanager
+    env_file:
+      - ./config
+    command: ["yarn", "nodemanager"]
